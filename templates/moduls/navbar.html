@@ -1,0 +1,160 @@
+{% load static %}
+{% load category_tags %}
+<header class="header-home">
+    <!-- header-top-area start -->
+    <div class="header-top-area hidden-xs">
+        <div class="container">
+            <div class="row">
+                <!-- header-top-left start -->
+                <div class="col-lg-6 col-md-6 col-sm-7">
+                    <div class="header-top-left">
+                        <div class="top-message">Добро пожаловать</div>
+                        <div class="phone-number"> Телефон службы поддержки: <span>123 456  789</span></div>
+                    </div>
+                </div>
+                <!-- header-top-left end -->
+                <!-- header-top-right start -->
+                <div class="col-lg-6 col-md-6 col-sm-5">
+                    <div class="header-top-right">
+                        <div class="lang-select">
+                            <ul>
+                                <li><a href="#"><img src="{% static 'img/en.png' %}" alt=""/></a></li>
+                            </ul>
+                        </div>
+                        <div class="top-menu">
+                            <ul>
+                                {#                                <li><a href="my-account.html">Личный кабинет</a></li>#}
+                                {#                                <li><a href="wishlist.html">My Wishlist</a></li>#}
+                                <li><a href="{% url 'cart:cart_detail' %}">Корзина</a></li>
+                                {#                                <li><a href="#">Login</a></li>#}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- header-top-right end -->
+            </div>
+        </div>
+    </div>
+    <!-- header-top-area end -->
+    <!-- header-mid-area start -->
+    <div class="header-mid-area">
+        <div class="container">
+            <div class="row">
+                <!-- logo start -->
+                <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
+                    <div class="logo">
+                        <a href="/"><img src="{% static 'img/logo/logo.png' %}" alt=""/></a>
+                    </div>
+                </div>
+                <!-- logo end -->
+                <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+                    <!-- cart-total start -->
+                    <div class="cart-total">
+                        <ul>
+                            <li><a href="{% url 'cart:cart_detail' %}"><span class="cart-icon"><i
+                                    class="fa fa-shopping-cart"></i></span>
+                                <span class="cart-no">Корзина: ({{ cart|length }})</span></a>
+                                <div class="mini-cart-content">
+                                    {% for item in cart %}
+                                        {% with product=item.product %}
+                                            <div class="cart-img-details">
+                                                <div class="cart-img-photo">
+                                                    <a href="{{ product.get_absolute_url }}">
+                                                        <img class="img-fluid" style="max-height: 50px" src="
+                                                                  {% if product.imageproducts.all %}
+                                                                        {{ product.imageproducts.first.image.url }}
+                                                                  {% else %}
+                                                                        {% static "img/no-image.jpg" %}
+                                                                  {% endif %}" alt=""/>
+                                                    </a>
+                                                    <span class="quantity">{{ item.quantity }}</span>
+                                                </div>
+                                                <div class="cart-img-contaent">
+                                                    <a href="#"><p>{{ product.name }}</p></a>
+                                                    <span>{{ item.price }}</span>
+                                                </div>
+                                                <div class="pro-del"><a
+                                                        href="{% url "cart:cart_remove" product.id %}"><i
+                                                        class="fa fa-times-circle"></i></a>
+                                                </div>
+                                            </div>
+                                        {% endwith %}
+                                    {% endfor %}
+                                    <div class="cart-inner-bottom">
+                                        <p class="total">На Сумму: <span
+                                                class="amount">{{ cart.get_total_price_after_discount }}</span></p>
+                                        <div class="clear"></div>
+                                        <p class="cart-button-top"><a href="{% url 'orders:order_create' %}">Оформить
+                                            заказ</a></p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- cart-total end -->
+                    <!-- header-search start -->
+                    <div class="header-search">
+                        <form action="#">
+                            <input type="text" placeholder="Поиск продукта..."/>
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+                    <!-- header-search end -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- header-mid-area end -->
+    <!-- mainmenu-area start -->
+    <div class="mainmenu-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="mainmenu">
+                        <nav>
+                            <ul>
+                                <li><a href="/">Домашняя</a></li>
+                                <li><a href="about-us.html">about</a></li>
+                                <li><a href="blog.html">Blog</a></li>
+                                <li><a href="{% url 'shop:product_list' %}">Магазин</a>
+                                    <div class="mega-menu">
+											<span>
+												<a href="#" class="mega-title">Категории</a>
+                                                {% get_category as categorys %}
+                                                {% for category in categorys %}
+                                                    <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+                                                {% endfor %}
+											</span>
+                                    </div>
+                                </li>
+                                <li><a href="shop.html">Footwear </a></li>
+                                <li><a href="contact.html">Contact</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- mainmenu-area end -->
+    <!-- mobile-menu-area start -->
+    <div class="mobile-menu-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mobile-menu">
+                        <nav id="dropdown">
+                            <ul>
+                                <li><a href="/">Домашняя</a></li>
+                                <li><a href="blog.html">blog</a></li>
+                                <li><a href="{% url 'shop:product_list' %}">Магазин</a></li>
+                                <li><a href="contact.html">Contact</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- mobile-menu-area end -->
+</header>

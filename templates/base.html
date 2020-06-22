@@ -1,0 +1,31 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Home | pure-shop</title>
+    <meta name="description" content="">
+
+    <!-- Mobile specific metas
+    ============================================ -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% include 'moduls/head.html' %}
+    {% block css %}
+    {% endblock %}
+</head>
+<body>
+<div>{% include 'moduls/navbar.html' %}</div>
+
+{% block content %}
+{% endblock %}
+
+
+
+{% include 'moduls/footer.html' %}
+{% include 'moduls/script.html' %}
+{% block js %}
+{% endblock %}
+</body>
+</html>

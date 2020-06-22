@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}
+    Checkout
+{% endblock %}
+
+{% block content %}  <h1>Checkout</h1>
+
+    <div class="col-sm-8">
+        <div class="row">
+            <div class="col-sm-5">
+                <form action="." method="post">
+                    {% for item in form %}
+                        <div class="form-django">
+                            <label>{{ item.label }}</label>
+                            {{ item }}
+                        </div>
+                    {% endfor %}
+
+                    <p>
+                        <input class="btn btn-secondary" type="submit" value="Place order">
+                    </p>
+                    {% csrf_token %}
+                </form>
+            </div>
+
+            <div class="col-sm-5">
+                <table class="table">
+                    <thead>
+                    <tr>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in cart %}
+                        <tr>
+                            <th scope="row">{{ item.product.name }}</th>
+                            <td>{{ item.quantity }} шт</td>
+                            <td>{{ item.total_price }}</td>
+                        </tr>
+                    {% endfor %}
+                    {% if cart.coupon %}
+                        <tr>
+                            <th scope="row">Купон "{{ cart.coupon.code }}"</th>
+                            <td>скидка {{ cart.coupon.discount }}%</td>
+                            <td>-{{ cart.get_discount|floatformat:2 }} руб</td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <th scope="row"></th>
+                        <td>Сумма к оплате</td>
+                        <td>{{ cart.get_total_price_after_discount|floatformat:2 }} руб.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

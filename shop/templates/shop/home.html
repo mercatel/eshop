@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+    <!-- features-area start -->
+    <div class="features-area pad-60">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="section-heading">
+                        <h1 style="margin-bottom: 2%">Популярные товары</h1>
+                        <div class="title-icon">
+                            <span><i class="fa fa-angle-left"></i> <i class="fa fa-angle-right"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- section-heading end -->
+            <div class="row">
+                <div class="col-md-12" style="text-align: center">
+                    <div>
+                        <div class="row">
+                            <div class="col-lg-12 owl-carousel owl-theme">
+                                {% for pop_product in popular_products %}
+                                    {% with pop_product.product as product %}
+                                        {% include 'shop/include/cart_product.html' %}
+                                    {% endwith %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- section-heading start -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="section-heading">
+                        <h1 style="margin-bottom: 2%">FEATURED PRODUCTS</h1>
+                        <div class="title-icon">
+                            <span><i class="fa fa-angle-left"></i> <i class="fa fa-angle-right"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- section-heading end -->
+            <div class="row">
+                <div class="col-md-12" style="text-align: center">
+                    <ul class="nav product-nav category-nav" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="pills-contact-tab" data-toggle="pill"
+                               href="#all_catrgory"
+                               role="tab" aria-controls="pills-contact"
+                               aria-selected="false">Все</a>
+                        </li>
+                        {% for category in categories %}
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="pills-contact-tab" data-toggle="pill"
+                                   href="#{{ category.slug }}"
+                                   role="tab" aria-controls="pills-contact"
+                                   aria-selected="false">{{ category }}</a>
+                            </li>
+                        {% endfor %}
+
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="all_catrgory" role="tabpanel"
+                             aria-labelledby="pills-contact-tab">
+                            <div class="row">
+                                <div class="col-lg-12 owl-carousel owl-theme">
+                                    {% for product in products %}
+                                        {% include 'shop/include/cart_product.html' %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% for category in categories %}
+                            <div class="tab-pane fade" id="{{ category.slug }}" role="tabpanel"
+                                 aria-labelledby="pills-contact-tab">
+                                <div class="row">
+                                    <div class="col-lg-12 owl-carousel owl-theme">
+                                        {% for product in category.products.all %}
+                                            {% include 'shop/include/cart_product.html' %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- features-area end -->
+
+{% endblock %}
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $('.owl-carousel').owlCarousel({
+                items: 5,
+                loop: true,
+                responsive: {
+                    0: {
+                        items: 2
+                    },
+                    600: {
+                        items: 3
+                    },
+                    1000: {
+                        items: 5
+                    }
+                }
+
+
+            });
+        });
+    </script>
+{% endblock %}

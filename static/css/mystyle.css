@@ -1,0 +1,36 @@
+.category-nav {
+    display: inline-flex
+}
+
+.product-slide {
+    height: 500px;
+    display: grid;
+    grid-gap: 10px 10px;
+}
+
+.product:hover {
+    outline: lightgrey;
+    border: 5px solid #eaeaea;
+    background-color: #ffffff;
+
+}
+
+.product-name {
+    margin-top: 10%
+}
+
+.product-price {
+    margin: 10% auto auto;
+    text-align: left;
+}
+
+.product-image {
+    min-width: 180px;
+    max-width: 180px;
+    min-height: 200px;
+    max-height: 200px;
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}

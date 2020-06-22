@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    Your shopping cart
+{% endblock %}
+
+{% block content %}
+    <div class="entry-header-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="entry-header">
+                        <h1 class="entry-title">Корзина</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- cart-main-area start -->
+    <div class="cart-main-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="table-content table-responsive">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th class="product-thumbnail">Image</th>
+                                <th class="product-name">Product</th>
+                                <th class="product-price">Price</th>
+                                <th class="product-quantity" style="text-align: center">Quantity</th>
+                                <th class="product-subtotal">Total</th>
+                                <th class="product-remove">Remove</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in cart %}
+                                {% with product=item.product %}
+                                    <tr>
+                                        <td class="product-thumbnail"><a href="{{ product.get_absolute_url }}">
+                                            <img src="
+                                                        {% if product.imageproducts.all %}
+                                                            {{ product.imageproducts.first.image.url }}
+                                                        {% else %}
+                                                            {% static "img/no-image.jpg" %}
+                                                        {% endif %}" alt=""/></a>
+                                        </td>
+                                        <td class="product-name">
+                                            <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+                                        </td>
+                                        <td class="product-price"><span
+                                                class="amount">{{ item.price }} руб.</span>
+                                        </td>
+
+                                        <td class="product-quantity">
+                                            <form action="{% url "cart:cart_add" product.id %}" method="post">
+                                                <div class="row">
+                                                    {{ item.update_quantity_form.quantity }}
+                                                    {{ item.update_quantity_form.update }}
+                                                    <input type="submit" value="Update">
+                                                    {% csrf_token %}
+                                                </div>
+                                            </form>
+                                        </td>
+
+
+                                        <td class="product-subtotal">{{ item.total_price|floatformat:"2" }}
+                                            руб.
+                                        </td>
+                                        <td class="product-remove">
+                                            <a href="{% url "cart:cart_remove" product.id %}">
+                                                <i class="fa fa-times"></i>
+                                            </a></td>
+                                    </tr>
+                                {% endwith %}
+                            {% endfor %}
+                            {% if cart.coupon %}
+                                <td><img src="" alt="..."></td>
+                                <td>{{ cart.coupon.code }}</td>
+                                <td> - {{ cart.coupon.discount }} %</td>
+                                <td></td>
+                                <td>-{{ cart.get_coupon_discount|floatformat:"2" }}руб</td>
+                                <td><a href="{% url "coupons:remove" %}" class="btn btn-success">удалить</a></td>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 col-sm-7 col-xs-12">
+                            <div class="buttons-cart">
+                                <a href="{% url "shop:product_list" %}">Продолжить покупки</a>
+                            </div>
+                            <div class="coupon">
+                                <h3>Купон</h3>
+                                <p>Введите свой код купона, если он у вас есть.</p>
+                                <form action="{% url "coupons:apply" %}" method="post">
+                                    {{ coupon_apply_form.code }}
+                                    <input class="btn btn-success" type="submit" value="Применить">
+                                    {% csrf_token %}
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-5 col-xs-12">
+                            <div class="cart_totals">
+                                <h2>Итого</h2>
+                                <table>
+                                    <tbody>
+                                    <tr class="cart-subtotal">
+                                        <th>Subtotal</th>
+                                        <td><span class="amount">{{ cart.get_total_price|floatformat:"2" }}</span></td>
+                                    </tr>
+                                    <tr class="discount">
+                                        <th>Скидки</th>
+                                        <td>
+                                            <ul id="shipping_method">
+                                                <li>
+                                                    <label>
+                                                        Акции: <span class="amount">{{ cart.get_total_discount }}</span>
+                                                    </label>
+                                                </li>
+                                                {% if cart.coupon %}
+                                                    <li>
+                                                        <label>
+                                                            по Купону <span
+                                                                class="amount">{{ cart.get_coupon_discount }}</span>
+                                                        </label>
+                                                    </li>
+                                                {% else %}
+                                                     <li>
+                                                        <label>
+                                                            _____________ <span
+                                                                class="amount"></span>
+                                                        </label>
+                                                    </li>
+                                                {% endif %}
+                                                <li></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr class="order-total">
+                                        <th>Total</th>
+                                        <td>
+                                            <strong><span class="amount">{{ cart.get_total_price_after_discount|floatformat:"2" }} руб.</span></strong>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="wc-proceed-to-checkout">
+                                    <a href="{% url 'orders:order_create' %}">Оформить заказ</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- cart-main-area end -->
+
+{% endblock %}
+{% block js %}
+{% endblock %}

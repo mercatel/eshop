@@ -1,0 +1,34 @@
+{% load static %}
+
+<div class="product" style="min-width: 200px;max-width: 200px;
+        min-height: 400px;
+        max-height: 400px;
+        {#outline: 2px solid #105066;#}
+        margin: 10px;">
+    {% if product.promoaction.get %}
+            <span class="sale-text">СКИДКА %</span>
+    {% endif %}
+    <div class="product-image">
+        <a href="{{ product.get_absolute_url }}">
+            <img class="img-fluid"
+                 style="max-height: 190px; width: auto;"
+                 src="
+                                                                {% if product.imageproducts.first.image %}
+                                                                    {{ product.imageproducts.first.image.url }}
+                                                                {% else %}
+                                                                    {% static 'img/no-image.jpg' %}
+                                                                {% endif %}" alt=""/>
+        </a>
+    </div>
+    <div class="product-name">
+        <span class="h6"><a href="#">{{ product.name }}</a></span>
+    </div>
+    <div class="product-price">
+        {% if product.promoaction.get %}
+            <span class="h5">{{ product.get_price_with_discount }} руб.</span>
+            <span class="h6"><del>{{ product.price }} руб.</del></span>
+        {% else %}
+            <span class="h5">{{ product.price }} руб.</span>
+        {% endif %}
+    </div>
+</div>
