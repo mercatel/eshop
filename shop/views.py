@@ -41,8 +41,12 @@ def product_detail(request, id, slug):
     product = get_object_or_404(Product, id=id, slug=slug, available=True)
     cart_product_form = CartAddProductForm()
     rating = RatingForm()
+
     ratingstar = RatingProduct.objects.filter(product=id)
-    rating_avg = str(int(ratingstar.aggregate(Avg('star_id'))['star_id__avg']))
+    if ratingstar:
+        rating_avg = str(int(ratingstar.aggregate(Avg('star_id'))['star_id__avg']))
+    else:
+        rating_avg = ""
 
     with transaction.atomic():
         counter, created = ProductStatistic.objects.get_or_create(product=product)
