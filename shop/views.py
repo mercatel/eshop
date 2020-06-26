@@ -1,8 +1,9 @@
 from django.db import transaction
-from django.db.models import F
+from django.db.models import F, Avg
 from django.shortcuts import render, get_object_or_404
 
-from analysis.models import ProductStatistic
+from analysis.forms import RatingForm
+from analysis.models import ProductStatistic, RatingProduct
 from cart.forms import CartAddProductForm
 from .models import Category, Product
 from .utils import get_client_ip
@@ -39,6 +40,9 @@ def product_list(request, category_slug=None):
 def product_detail(request, id, slug):
     product = get_object_or_404(Product, id=id, slug=slug, available=True)
     cart_product_form = CartAddProductForm()
+    rating = RatingForm()
+    ratingstar = RatingProduct.objects.filter(product=id)
+    rating_avg = str(int(ratingstar.aggregate(Avg('star_id'))['star_id__avg']))
 
     with transaction.atomic():
         counter, created = ProductStatistic.objects.get_or_create(product=product)
@@ -51,4 +55,6 @@ def product_detail(request, id, slug):
 
     return render(request, 'shop/product/detail.html', {'product': product,
                                                         'cart_product_form': cart_product_form,
+                                                        'rating': rating,
+                                                        'rating_avg': rating_avg,
                                                         })

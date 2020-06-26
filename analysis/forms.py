@@ -3,7 +3,7 @@ from django import forms
 from analysis.models import RatingStar, RatingProduct
 
 
-class Rating(forms.ModelForm):
+class RatingForm(forms.ModelForm):
     star = forms.ModelChoiceField(
         queryset=RatingStar.objects.all(),
         widget=forms.RadioSelect(),

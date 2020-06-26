@@ -36,6 +36,30 @@
                     <h6>
                         <a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a>
                     </h6>
+                    <form action="{% url 'analysis:add_rating' %}" method="post" name="rating">
+                        <b>Рейтинг</b>
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ product.id }}" name="product">
+                        <span class="rating">
+                            {% for form in rating %}
+                                {% for item in form %}
+                                    {% if rating_avg == item.choice_label %}
+                                        <input id="rating{{ item.choice_label }}" type="radio"
+                                               value="{{ item.choice_label }}"
+                                               name="star" checked>
+                                        <label for="rating{{ item.choice_label }}">1</label>
+                                    {% else %}
+                                        <input id="rating{{ item.choice_label }}" type="radio"
+                                               value="{{ item.choice_label }}"
+                                               name="star">
+                                        <label for="rating{{ item.choice_label }}"></label>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+
+                        </span>
+                    </form>
+
                     {% if product.promoaction.get %}
                         <div>
                             <span class="h3" style="color: #bd2130">{{ product.get_price_with_discount }}руб.</span>
@@ -69,9 +93,19 @@
             $('.owl-carousel').owlCarousel({
                 items: 1,
                 loop: true,
-
-
             });
+
+
+            const rating = document.querySelector('form[name=rating]');
+            rating.addEventListener('change', function (Event) {
+                let data = new FormData(this);
+                fetch(`${this.action}`, {
+                    method: 'POST',
+                    body: data
+                })
+                    .then(response => alert("Рейтинг установлен"))
+                    .catch(error => alert("Ошибка"))
+            })
 
 
         });
