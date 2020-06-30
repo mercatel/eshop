@@ -1,5 +1,6 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.db.models import Avg
 from django.urls import reverse
 
 
@@ -16,9 +17,9 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    def get_absolute_url(self):
-        return reverse('shop:product_list_by_category',
-                       args=[self.slug])
+    # def get_absolute_url(self):
+    #     return reverse('shop:product_list',
+    #                    args=self.slug)
 
 
 class Product(models.Model):
@@ -40,14 +41,22 @@ class Product(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('shop:product_detail',
-                       args=[self.id, self.slug])
+        return reverse('shop:product_detail', kwargs={'slug': self.slug})
 
     def get_price_with_discount(self):
         if self.promoaction.all():
             result = self.price - ((self.price / 100) * self.promoaction.get().discount)
         else:
             result = self.price
+        return result
+
+    def get_rating_star_avg(self):
+        if self.ratingproduct.all():
+            ratingstar = self.ratingproduct.all()
+            result = int(ratingstar.aggregate(Avg('star_id'))['star_id__avg'])
+
+        else:
+            result = 0
         return result
 
 
@@ -88,6 +97,3 @@ class PromoActionProduct(models.Model):
         ordering = ('product',)
         verbose_name = 'Акция'
         verbose_name_plural = 'Акции'
-
-
-

@@ -41,7 +41,7 @@
                         {% csrf_token %}
                         <input type="hidden" value="{{ product.id }}" name="product">
                         <span class="rating">
-                            {% for form in rating %}
+                            {% for form in star_form %}
                                 {% for item in form %}
                                     {% if rating_avg == item.choice_label %}
                                         <input id="rating{{ item.choice_label }}" type="radio"
@@ -74,7 +74,6 @@
                     {% endif %}
                     <p class="card-text">{{ product.description|linebreaks }}</p>
                     <p class="card-text"><small class="text-muted"></small></p>
-                    <p class="price">${{ product.price }}</p>
                     <form action="{% url "cart:cart_add" product.id %}" method="post">
                         {{ cart_product_form }}
                         {% csrf_token %}
@@ -103,8 +102,6 @@
                     method: 'POST',
                     body: data
                 })
-                    .then(response => alert("Рейтинг установлен"))
-                    .catch(error => alert("Ошибка"))
             })
 
 

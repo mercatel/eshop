@@ -94,8 +94,8 @@
                     <!-- cart-total end -->
                     <!-- header-search start -->
                     <div class="header-search">
-                        <form action="#">
-                            <input type="text" placeholder="Поиск продукта..."/>
+                        <form action="{% url 'shop:search' %}" method="get">
+                            <input type="text" name="search" placeholder="Поиск продукта..."/>
                             <button type="submit"><i class="fa fa-search"></i></button>
                         </form>
                     </div>
@@ -119,11 +119,16 @@
                                 <li><a href="{% url 'shop:product_list' %}">Магазин</a>
                                     <div class="mega-menu">
 											<span>
-												<a href="#" class="mega-title">Категории</a>
-                                                {% get_category as categorys %}
-                                                {% for category in categorys %}
-                                                    <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+                                            <form action="{% url 'shop:product_list' %}" method="get">
+												<a href="{% url 'shop:product_list' %}" class="mega-title">Категории</a>
+                                                {% get_category as categories %}
+                                                {% for category in categories %}
+                                                    <a><button class="btn-as-href" type="submit" value="{{ category.slug }}" name="category">{{ category.name }}</button></a>
+
+
+{#                                                    <a href="{% url 'shop:product_list' %}">{{ category.name }}</a>#}
                                                 {% endfor %}
+                                            </form>
 											</span>
                                     </div>
                                 </li>

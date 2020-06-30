@@ -72,4 +72,11 @@
     opacity: 1;
 }
 
+.btn-as-href {
+    background: none;
+    outline: none;
+    border: none;
+    text-transform: uppercase;
+}
+
 /* //Checkbox stars */

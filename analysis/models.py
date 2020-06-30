@@ -31,7 +31,7 @@ class RatingStar(models.Model):
 class RatingProduct(models.Model):
     ip = models.GenericIPAddressField(default=0)
     star = models.ForeignKey(RatingStar, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='ratingproduct')
 
     def __str__(self):
         return "{}".format(self.star, self.product)

@@ -6,19 +6,30 @@
         {#outline: 2px solid #105066;#}
         margin: 10px;">
     {% if product.promoaction.get %}
-            <span class="sale-text">СКИДКА %</span>
+        <span class="sale-text">СКИДКА %</span>
     {% endif %}
     <div class="product-image">
         <a href="{{ product.get_absolute_url }}">
             <img class="img-fluid"
                  style="max-height: 190px; width: auto;"
                  src="
-                                                                {% if product.imageproducts.first.image %}
-                                                                    {{ product.imageproducts.first.image.url }}
-                                                                {% else %}
-                                                                    {% static 'img/no-image.jpg' %}
-                                                                {% endif %}" alt=""/>
+                      {% if product.imageproducts.first.image %}
+                          {{ product.imageproducts.first.image.url }}
+                      {% else %}
+                          {% static 'img/no-image.jpg' %}
+                      {% endif %}" alt=""/>
         </a>
+    </div>
+    <div class="rating">
+        <div class="row" style="margin: auto">
+            {% for star in star_rating reversed %}
+                {% if star.value <= product.get_rating_star_avg %}
+                    <img src="{% static 'img/star-on-big.png' %}" style="height: 20px; width: 20px">
+                {% else %}
+                    <img src="{% static 'img/star-off-big.png' %}" style="height: 20px; width: 20px">
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
     <div class="product-name">
         <span class="h6"><a href="#">{{ product.name }}</a></span>
@@ -30,5 +41,14 @@
         {% else %}
             <span class="h5">{{ product.price }} руб.</span>
         {% endif %}
+    </div>
+    <div class="add-cart">
+        <form action="{% url "cart:cart_add" product.id %}" method="post">
+            {% csrf_token %}
+            {{ cart_product_form.update }}
+            <input type="hidden" name="quantity" maxlength="100" value="1">
+
+            <input class="btn btn-success" type="submit" value="В корзину">
+        </form>
     </div>
 </div>
